@@ -40,7 +40,7 @@ public class GetUtil {
             try {
                 currentObj = f.get(currentObj);
             } catch (IllegalAccessException e) {
-                e.printStackTrace();
+                return null;
             }
         }
         return currentObj;
