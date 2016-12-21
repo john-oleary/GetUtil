@@ -25,24 +25,15 @@ public class GetUtil {
      */
     public static Object get(Object object, String path) {
         String[] arr = path.split("\\.");
-        if (arr.length == 0) {
-            arr = new String[1];
-            arr[0] = path;
-        }
-        Object currentObj = object;
         for (String property : arr) {
             Field f;
             try {
-                f = currentObj.getClass().getField(property);
-            } catch (NoSuchFieldException e) {
-                return null;
-            }
-            try {
-                currentObj = f.get(currentObj);
-            } catch (IllegalAccessException e) {
+                f = object.getClass().getField(property);
+                object = f.get(object);
+            } catch (Exception e) {
                 return null;
             }
         }
-        return currentObj;
+        return object;
     }
 }
