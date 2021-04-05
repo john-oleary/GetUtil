@@ -17,7 +17,6 @@ public class GetUtil {
      * With this method:
      *  Object o = get(a, "b.c.d");
      *
-     * Only considers paths in which all variables are public.
      *
      * @param object  object that contains indirect or direct reference to a variable we want to retrieve
      * @param path  the path of the variable within the object
@@ -27,9 +26,12 @@ public class GetUtil {
         String[] arr = path.split("\\.");
         for (String property : arr) {
             Field f;
-            try {
-                f = object.getClass().getField(property);
+            try {                               
+                f = object.getClass().getDeclaredField(property);
+                boolean b = f.canAccess(object);
+                if (!b) f.setAccessible(true);
                 object = f.get(object);
+                if (!b) f.setAccessible(false);                                                
             } catch (Exception e) {
                 return null;
             }
